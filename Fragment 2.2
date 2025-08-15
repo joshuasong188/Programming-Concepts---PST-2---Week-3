@@ -1,0 +1,54 @@
+# --- Full CRUD for Core Data ---
+def add_student(name: str, enrolled_in: Optional[List[str]] = None) -> int:
+    if enrolled_in is None:
+        enrolled_in = []
+    student_id = app_data["next_student_id"]
+    new_student = {"id": student_id, "name": name, "enrolled_in": enrolled_in}
+    app_data["students"].append(new_student)
+    app_data["next_student_id"] += 1
+    print(f"Core: Student '{name}' added with ID {student_id}.")
+    return student_id
+
+def update_student(student_id: int, **fields: Any) -> bool:
+    for student in app_data["students"]:
+        if student["id"] == student_id:
+            student.update(fields)
+            print(f"Student {student_id} updated.")
+            return True
+    print(f"Error: Student with ID {student_id} not found.")
+    return False
+
+def remove_student(student_id: int) -> bool:
+    original_len = len(app_data["students"])
+    app_data["students"] = [s for s in app_data["students"] if s["id"] != student_id]
+    if len(app_data["students"]) < original_len:
+        print(f"Student {student_id} removed.")
+        return True
+    print(f"Error: Student with ID {student_id} not found.")
+    return False
+
+def add_teacher(name: str, speciality: str) -> int:
+    teacher_id = app_data["next_teacher_id"]
+    new_teacher = {"id": teacher_id, "name": name, "speciality": speciality}
+    app_data["teachers"].append(new_teacher)
+    app_data["next_teacher_id"] += 1
+    print(f"Core: Teacher '{name}' added with ID {teacher_id}.")
+    return teacher_id
+
+def update_teacher(teacher_id: int, **fields: Any) -> bool:
+    for teacher in app_data["teachers"]:
+        if teacher["id"] == teacher_id:
+            teacher.update(fields)
+            print(f"Teacher {teacher_id} updated.")
+            return True
+    print(f"Error: Teacher with ID {teacher_id} not found.")
+    return False
+
+def remove_teacher(teacher_id: int) -> bool:
+    original_len = len(app_data["teachers"])
+    app_data["teachers"] = [t for t in app_data["teachers"] if t["id"] != teacher_id]
+    if len(app_data["teachers"]) < original_len:
+        print(f"Teacher {teacher_id} removed.")
+        return True
+    print(f"Error: Teacher with ID {teacher_id} not found.")
+    return False
